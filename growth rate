@@ -1,0 +1,25 @@
+#https://www.linkedin.com/pulse/growth-rate-atmospheric-co2-level-al-yazdani/?trackingId=qcWG8afbNGgpMUeJLacWoA%3D%3D
+
+library(tidyverse)
+library(easynls)
+library(ggplot2)
+
+
+options(digits = 4)
+options(scipen=999)
+
+
+co2<-read.csv("mole_fraction_of_co2.csv") 
+
+ggplot(co2,aes(x=year,y=mean_global_co2_level_ppm))+
+  geom_line(col="red")+
+  scale_x_continuous(breaks = seq(0,2000,250))
+
+
+co2_pre_1950<-co2 %>% filter(year<=1950) 
+co2_post_1950<-co2 %>% filter(year>1950)
+
+
+nlsfit(co2_post_1950,6,start=c(100,0.001))
+nlsplot(co2_post_1950,6,start=c(100,0.001),xlab="year",ylab="mean_global_co2_level(ppm)",position=1)
+box()
